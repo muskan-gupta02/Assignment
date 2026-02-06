@@ -91,7 +91,7 @@ public class CaseKaroTest {
         System.err.println(">>> [DEBUG] Adding Material: " + materialName + "...");
         openBtn.dispatchEvent("click");
         
-        // Handle the 24-modal conflict by targeting only the visible one
+        
         Locator modal = page.locator("quick-add-modal:visible").first();
         modal.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
         
