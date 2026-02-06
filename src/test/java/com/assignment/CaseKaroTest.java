@@ -5,8 +5,8 @@ import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import org.junit.jupiter.api.*;
-import java.util.List;
-import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+
+import java.util.regex.Pattern;
 
 public class CaseKaroTest {
 
@@ -46,57 +46,85 @@ public class CaseKaroTest {
         page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Search")).fill("Apple");
         Locator appleBrand = page.locator("text=Apple");
 
-        Page iPhoneBackCoverPage = context.waitForPage(() -> appleBrand.click());
-        iPhoneBackCoverPage.waitForLoadState(LoadState.DOMCONTENTLOADED);
+        Page iPhonePage = context.waitForPage(() -> appleBrand.click());
+        iPhonePage.waitForLoadState(LoadState.DOMCONTENTLOADED);
 
-        iPhoneBackCoverPage.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Search")).fill("iPhone 16 Pro");
-        iPhoneBackCoverPage.waitForTimeout(2000); 
+        iPhonePage.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Search")).fill("iPhone 16 Pro");
+        iPhonePage.waitForTimeout(2000); 
 
-        iPhoneBackCoverPage.locator("text=iPhone 16 Pro").first().click();
+        iPhonePage.locator("text=iPhone 16 Pro").first().click();
 
         System.err.println(">>> [DEBUG] Waiting 4 seconds for grid...");
-        iPhoneBackCoverPage.waitForTimeout(4000);
+        iPhonePage.waitForTimeout(4000);
         
-        Locator chooseOptionsBtn = iPhoneBackCoverPage.locator("#product-grid li.grid__item").first().locator("button[name='add']");
-        Locator closeCartBtn = iPhoneBackCoverPage.locator("button.drawer__close[aria-label='Close']");
-        Locator addToCartBtn = iPhoneBackCoverPage.locator("quick-add-modal button[name='add']");
+        // Locators scoped to the first product
+        Locator firstProduct = iPhonePage.locator("#product-grid li.grid__item").first();
+        Locator chooseOptionsBtn = firstProduct.locator("button[name='add']");
+        Locator closeCartBtn = iPhonePage.locator("button.drawer__close[aria-label='Close']");
 
-        // --- 1.HARD ---
-        chooseOptionsBtn.dispatchEvent("click");
-        iPhoneBackCoverPage.waitForTimeout(2000);
-        iPhoneBackCoverPage.locator("quick-add-modal label:has-text('Hard')").first().click();
-        addToCartBtn.click();
-        iPhoneBackCoverPage.waitForTimeout(2000);
-        closeCartBtn.click();
-        iPhoneBackCoverPage.waitForTimeout(2000);
+        // --- 1. HARD ---
+        addVariant(iPhonePage, chooseOptionsBtn, "Hard", closeCartBtn);
 
         // --- 2. SOFT ---
+        addVariant(iPhonePage, chooseOptionsBtn, "Soft", closeCartBtn);
+
+        // --- 3. GLASS (Final) ---
+        System.err.println(">>> [DEBUG] Adding Material: Glass...");
         chooseOptionsBtn.dispatchEvent("click");
-        iPhoneBackCoverPage.waitForTimeout(2000);
-        iPhoneBackCoverPage.locator("quick-add-modal label:has-text('Soft')").first().click();
-        addToCartBtn.click();
-        iPhoneBackCoverPage.waitForTimeout(2000);
-        closeCartBtn.click();
-        iPhoneBackCoverPage.waitForTimeout(2000);
+        
+        Locator modal = iPhonePage.locator("quick-add-modal:visible").first();
+        modal.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        
+        // Exact match regex to ensure clean selection
+        modal.locator("label").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^\\s*Glass\\s*$", Pattern.MULTILINE))).click();
+        modal.locator("button[name='add']").click();
+        
+        iPhonePage.waitForTimeout(2000);
 
-        // --- 3. GLASS ---
-        chooseOptionsBtn.dispatchEvent("click");
-        iPhoneBackCoverPage.waitForTimeout(2000);
-        iPhoneBackCoverPage.locator("quick-add-modal label:has-text('Glass')").first().click();
-        addToCartBtn.click();
-        iPhoneBackCoverPage.waitForTimeout(2000);
+        // --- PRINT FINAL CART ---
+        printCartDetails(iPhonePage);
 
-        // --- PRINT FINAL ITEMS ---
-        System.err.println("\n>>> [DEBUG] Printing Cart Summary...");
-        Locator cartItems = iPhoneBackCoverPage.locator(".cart-item__name");
-        List<String> productNames = cartItems.allTextContents();
+        iPhonePage.waitForTimeout(4000);
+    }
 
-        System.err.println("===========================================");
-        System.err.println("FINAL CART INVENTORY (" + productNames.size() + " items)");
-        System.err.println("===========================================");
-        productNames.forEach(name -> System.err.println("- " + name.trim()));
-        System.err.println("===========================================");
+    private void addVariant(Page page, Locator openBtn, String materialName, Locator closeBtn) {
+        System.err.println(">>> [DEBUG] Adding Material: " + materialName + "...");
+        openBtn.dispatchEvent("click");
+        
+        // Handle the 24-modal conflict by targeting only the visible one
+        Locator modal = page.locator("quick-add-modal:visible").first();
+        modal.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        
+        // Regex ensures "Soft" doesn't accidentally hit "Black Soft"
+        modal.locator("label").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^\\s*" + materialName + "\\s*$", Pattern.MULTILINE))).click();
+        
+        modal.locator("button[name='add']").click();
+        page.waitForTimeout(2000);
+        closeBtn.click();
+        
+        // Wait for cart overlay to clear
+        page.locator(".drawer").waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
+        page.waitForTimeout(1000);
+    }
 
-        iPhoneBackCoverPage.waitForTimeout(4000);
+    private void printCartDetails(Page page) {
+        System.err.println("\n>>> [DEBUG] Final Cart Summary:");
+        page.locator("cart-drawer-items").waitFor();
+        Locator cartRows = page.locator("tr.cart-item");
+        
+        System.err.println("===============================================================");
+        for (int i = 0; i < cartRows.count(); i++) {
+            Locator row = cartRows.nth(i);
+            String mat = row.locator("dd").innerText().trim();
+            String prc = row.locator(".price").first().innerText().trim();
+            String url = "https://casekaro.com" + row.locator("a.cart-item__name").getAttribute("href");
+
+            System.err.println("ITEM #" + (i + 1));
+            System.err.println("   Material : " + mat);
+            System.err.println("   Price    : " + prc);
+            System.err.println("   Link     : " + url);
+            System.err.println("---------------------------------------------------------------");
+        }
+        System.err.println("===============================================================");
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.assignment.CaseKaroTest" time="32.477" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.assignment.CaseKaroTest" time="26.082" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -13,7 +13,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="IN"/>
     <property name="sun.boot.library.path" value="/home/jsrk/.sdkman/candidates/java/21.0.6-tem/lib"/>
-    <property name="sun.java.command" value="/home/jsrk/Desktop/playwright-java/target/surefire/surefirebooter-20260206174008785_3.jar /home/jsrk/Desktop/playwright-java/target/surefire 2026-02-06T17-40-08_721-jvmRun1 surefire-20260206174008785_1tmp surefire_0-20260206174008785_2tmp"/>
+    <property name="sun.java.command" value="/home/jsrk/Desktop/playwright-java/target/surefire/surefirebooter-20260206214347532_3.jar /home/jsrk/Desktop/playwright-java/target/surefire 2026-02-06T21-43-47_463-jvmRun1 surefire-20260206214347532_1tmp surefire_0-20260206214347532_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/jsrk/Desktop/playwright-java/target/test-classes:/home/jsrk/Desktop/playwright-java/target/classes:/home/jsrk/.m2/repository/com/microsoft/playwright/playwright/1.42.0/playwright-1.42.0.jar:/home/jsrk/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:/home/jsrk/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/jsrk/.m2/repository/com/microsoft/playwright/driver/1.42.0/driver-1.42.0.jar:/home/jsrk/.m2/repository/com/microsoft/playwright/driver-bundle/1.42.0/driver-bundle-1.42.0.jar:/home/jsrk/.m2/repository/org/junit/jupiter/junit-jupiter/5.10.0/junit-jupiter-5.10.0.jar:/home/jsrk/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.10.0/junit-jupiter-api-5.10.0.jar:/home/jsrk/.m2/repository/org/junit/platform/junit-platform-commons/1.10.0/junit-platform-commons-1.10.0.jar:/home/jsrk/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/jsrk/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.10.0/junit-jupiter-params-5.10.0.jar:/home/jsrk/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.10.0/junit-jupiter-engine-5.10.0.jar:/home/jsrk/.m2/repository/org/junit/platform/junit-platform-engine/1.10.0/junit-platform-engine-1.10.0.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -28,7 +28,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-    <property name="surefire.real.class.path" value="/home/jsrk/Desktop/playwright-java/target/surefire/surefirebooter-20260206174008785_3.jar"/>
+    <property name="surefire.real.class.path" value="/home/jsrk/Desktop/playwright-java/target/surefire/surefirebooter-20260206214347532_3.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.6+7-LTS"/>
     <property name="user.name" value="jsrk"/>
@@ -55,17 +55,30 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="caseKaroAssignmentTest" classname="com.assignment.CaseKaroTest" time="30.929">
+  <testcase name="caseKaroAssignmentTest" classname="com.assignment.CaseKaroTest" time="24.55">
     <system-err><![CDATA[>>> [DEBUG] Waiting 4 seconds for grid...
+>>> [DEBUG] Adding Material: Hard...
+>>> [DEBUG] Adding Material: Soft...
+>>> [DEBUG] Adding Material: Glass...
 
->>> [DEBUG] Printing Cart Summary...
-===========================================
-FINAL CART INVENTORY (3 items)
-===========================================
-- Classic Porsche 911 iPhone 16 Pro Back Cover
-- Classic Porsche 911 iPhone 16 Pro Back Cover
-- Classic Porsche 911 iPhone 16 Pro Back Cover
-===========================================
+>>> [DEBUG] Final Cart Summary:
+===============================================================
+ITEM #1
+   Material : Glass
+   Price    : ₹ 249.00
+   Link     : https://casekaro.com/products/classic-porsche-911-iphone-16-pro-back-cover?variant=41955668263030
+---------------------------------------------------------------
+ITEM #2
+   Material : Soft
+   Price    : ₹ 149.00
+   Link     : https://casekaro.com/products/classic-porsche-911-iphone-16-pro-back-cover?variant=41955668230262
+---------------------------------------------------------------
+ITEM #3
+   Material : Hard
+   Price    : ₹ 69.00
+   Link     : https://casekaro.com/products/classic-porsche-911-iphone-16-pro-back-cover?variant=41955668197494
+---------------------------------------------------------------
+===============================================================
 ]]></system-err>
   </testcase>
 </testsuite>
