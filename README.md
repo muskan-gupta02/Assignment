@@ -4,4 +4,4 @@
 - ```Install Playwright Browsers using below command```
 - ```mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install"```
 - To Run test
-- ```mvc test or mvn clean test```
+- ```mvc clean and then mvn test -Dtest=CaseKaroTest```
